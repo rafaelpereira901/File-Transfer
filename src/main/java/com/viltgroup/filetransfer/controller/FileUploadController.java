@@ -32,7 +32,7 @@ public class FileUploadController {
 	@Autowired
 	FilesStorageService storageService;
 
-	@PostMapping("/upload")
+	@PostMapping("/newfile")
 	public String uploadFile(@RequestParam("file") MultipartFile file) {
 		String message = "";
 		try {
