@@ -6,15 +6,18 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-  const copyToClipboard = () => {
-  let copyText = document.getElementById("url");
-  let text = copyText.getAttribute('href');
-  
-  if (window.isSecureContext && navigator.clipboard) {
-    navigator.clipboard.writeText(text);
-  } else {
-    unsecuredCopyToClipboard(text);
-  }
+
+  function copyToClipboard(e){
+	  let element = e;
+	  let text = element.getAttribute('file');
+	  
+	  if (window.isSecureContext && navigator.clipboard) {
+	    navigator.clipboard.writeText(text);
+	  } else {
+	    unsecuredCopyToClipboard(text);
+	  }
+	  
+	  alert("Copied the text: " + text);
   };
 
 
@@ -71,7 +74,7 @@
 					<td>
 						<div class="d-flex flex-row">
 							<a th:href="${file.url}" target="_blank" id="url"><button title="Download" class="btn"><i class="bi bi-arrow-down-circle text-light"></i></button></a>
-							<button title="Copy to Clipboard" onclick="copyToClipboard()" class="btn"><i class="bi bi-clipboard-fill text-light"></i></button>
+							<button th:attr="file=${file.url}" title="Copy to Clipboard" onClick="copyToClipboard(this)" class="btn"><i class="bi bi-clipboard-fill text-light"></i></button>
 						</div>
 					</td>
 					<td><span th:text="${file.name}" >  </span></td>
