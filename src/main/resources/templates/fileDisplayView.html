@@ -6,24 +6,49 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-  function copyToClipboard() {
-	  let copyText = document.getElementById("url");
-	  let text = copyText.getAttribute('href');
-	  navigator.clipboard.writeText(text);
-	  alert("Copied the text: " + text);
-  } 
+  const copyToClipboard = () => {
+  let copyText = document.getElementById("url");
+  let text = copyText.getAttribute('href');
+  
+  if (window.isSecureContext && navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+  } else {
+    unsecuredCopyToClipboard(text);
+  }
+  };
+
+
+//  function copyToClipboard() {
+//	  let copyText = document.getElementById("url");
+//	  let text = copyText.getAttribute('href');
+//	  navigator.clipboard.writeText(text);
+//	  alert("Copied the text: " + text);
+//  } 
   
   function deleteFile(e) {
-  let filename = e.parentElement.getAttribute('title');
-  var host = window.location.host; 
-  axios.delete(`http://${host}/files/${filename}`).then(() => window.location.reload());
-
-}
+	  let filename = e.parentElement.getAttribute('title');
+	  var host = window.location.host; 
+	  axios.delete(`http://${host}/files/${filename}`).then(() => window.location.reload());
+  }
+  
+  function unsecuredCopyToClipboard(text) {
+	  const textArea = document.createElement("textarea");
+	  textArea.value = text;
+	  document.body.appendChild(textArea);
+	  textArea.focus();
+	  textArea.select();
+	  try {
+	    document.execCommand('copy');
+	  } catch (err) {
+	    console.error('Unable to copy to clipboard', err);
+	  }
+	  document.body.removeChild(textArea);
+  }
 </script>
 
 <div class="d-flex align-items-center flex-column bg-dark min-vh-100">
 	<div class="mt-5 text-light">
-		<form class="input-group" method="POST" action="upload" enctype="multipart/form-data">
+		<form class="input-group" method="POST" action="newfile" enctype="multipart/form-data">
 			<input class="form-control" type="file" name="file" id="file" />
 			<button class="btn btn-primary" type="submit" value="Upload" name="upload" id="upload" >
 				<i class="bi bi-upload"></i> Upload
